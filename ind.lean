@@ -48,7 +48,7 @@ namespace ind
     | (con m n) := con n m
 
     def s1 (A B : Type) : (p A B) -> (p B A):= fun x : (p A B),
-                            con (p2 A B x) (p1 x)
+                            con (p2 A B x) (p1 A B x)
 
 
   end p
