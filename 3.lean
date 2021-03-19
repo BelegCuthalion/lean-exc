@@ -1,7 +1,5 @@
 variables P Q R S : Prop
 
-open classical
-
 -- commutativity of ∧ and ∨
 example : P ∧ Q ↔ Q ∧ P :=
   iff.intro (λ x : _, ⟨x.right, x.left⟩) (λ x : _, ⟨x.right, x.left⟩)
@@ -130,12 +128,12 @@ example : ¬(P ∨ Q) ↔ ¬P ∧ ¬Q :=
 begin
   split,
   assume npq : ¬(P ∨ Q), split,
-    show ¬P, by_contradiction p,
+    show ¬P, assume p,
       from npq (or.inl p),
-    show ¬Q, by_contradiction q,
+    show ¬Q, assume q,
       from npq (or.inr q),
   assume npnq : ¬P ∧ ¬Q,
-    show ¬(P ∨ Q), by_contradiction pq,
+    show ¬(P ∨ Q), assume pq,
       cases pq with p q,
         from npnq.left p,
         from npnq.right q
@@ -144,7 +142,7 @@ end
 example : ¬P ∨ ¬Q → ¬(P ∧ Q) :=
 begin
   assume h : ¬P ∨ ¬Q,
-    show ¬(P ∧ Q), by_contradiction n,
+    show ¬(P ∧ Q), assume n,
     cases h with np nq,
       show false, from np n.left,
       show false, from nq n.right
@@ -154,13 +152,13 @@ example : ¬(P ∧ ¬P) := λ x : P ∧ ¬P, x.right x.left
 
 example : ¬(P ∧ ¬P) :=
 begin
-  by_contradiction f, from f.right f.left
+  assume f, from f.right f.left
 end
 
 example : P ∧ ¬Q → ¬(P → Q) :=
 begin
   assume h : P ∧ ¬Q,
-  show ¬(P → Q), by_contradiction f,
+  show ¬(P → Q), assume f,
     from h.right (f h.left)
 end
 
@@ -209,6 +207,8 @@ begin
   assume pAq nq p,
   show false, from nq (pAq p)
 end
+
+open classical
 
 example : (P → R ∨ S) → ((P → R) ∨ (P → S)) :=
 begin
