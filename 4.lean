@@ -38,7 +38,22 @@ begin
     assume r, from assume _, r
 end
 
-example : (∀ x, P x ∨ R) ↔ (∀ x, P x) ∨ R := sorry
+example : (∀ x, P x ∨ R) ↔ (∀ x, P x) ∨ R :=
+begin
+  split,
+
+  assume h, by_cases r : R,
+    right, from r,
+    left, assume x,
+      have h' : P x ∨ R, from h x,
+      cases h' with px r',
+        from px,
+        exfalso, from r r',
+
+  assume h, cases h with px r,
+    assume x, left, from px x,
+    assume x, right, from r
+end
 
 example : (∀ x, R → P x) ↔ (R → ∀ x, P x) :=
 begin
