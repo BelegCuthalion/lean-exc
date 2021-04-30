@@ -100,3 +100,66 @@ def Goldbach's_weak_conjecture : Prop :=
     ∃ w y z : ℕ, prime w ∧ prime y ∧ prime z ∧ x = w + y + z
 def Fermat's_last_theorem : Prop := ∀ n a b c : ℕ,
   3 ≤ n → ¬ (exp a n = (exp b n) + (exp c n))
+
+-- ex
+example : (∃ x : A, R) → R :=
+begin
+  assume ex, cases ex with _ r, exact r
+end
+
+variable a : A
+
+example : R → (∃ x : A, R) :=
+  assume : R, exists.intro a ‹ R ›
+
+example : (∃ x, P x ∧ R) ↔ (∃ x, P x) ∧ R :=
+begin split,
+  assume h, cases h with x _,
+  split,
+    existsi x, show P x, from ‹ P x ∧ R ›.left,
+    show R, from ‹ P x ∧ R ›.right,
+
+  assume h, cases h with ep r,
+  cases ep with x px, existsi x,
+  split,
+    show P x, from px,
+    show R, from r
+end
+
+example : (∃ x, P x ∨ Q x) ↔ (∃ x, P x) ∨ (∃ x, Q x) :=
+begin split,
+  assume : ∃ x, P x ∨ Q x,
+  cases ‹ ∃ x, P x ∨ Q x › with x,
+  cases ‹ P x ∨ Q x ›,
+    left, existsi x, exact ‹ P x ›,
+    right, existsi x, exact ‹ Q x ›,
+
+  assume : (∃ x, P x) ∨ (∃ x, Q x),
+  cases ‹ (∃ x, P x) ∨ (∃ x, Q x) ›,
+    cases ‹ ∃ x, P x › with x,
+    existsi x,
+      show P x ∨ Q x, left, exact ‹ P x ›,
+    cases ‹ ∃ x, Q x › with x,
+    existsi x,
+      show P x ∨ Q x, right, exact ‹ Q x ›
+end
+
+example : (∀ x, P x) ↔ ¬ (∃ x, ¬ P x) :=
+begin split,
+  assume : ∀ x, P x, assume : ∃ x, ¬ P x,
+  cases ‹ ∃ x, ¬ P x › with x,
+  show false, from ‹ ¬ P x › (‹ ∀ x, P x › x),
+
+  assume : ¬∃ (x : A), ¬P x, assume x,by_contradiction,
+  have : ∃ x, ¬ P x,
+    existsi x, from ‹ ¬ P x ›,
+  show false, from ‹ ¬∃ (x : A), ¬P x › this,
+end
+
+example : (∃ x, P x) ↔ ¬ (∀ x, ¬ P x) := sorry
+example : (¬ ∃ x, P x) ↔ (∀ x, ¬ P x) := sorry
+example : (¬ ∀ x, P x) ↔ (∃ x, ¬ P x) := sorry
+
+example : (∀ x, P x → R) ↔ (∃ x, P x) → R := sorry
+example : (∃ x, P x → R) ↔ (∀ x, P x) → R := sorry
+example : (∃ x, R → P x) ↔ (R → ∃ x, P x) := sorry
