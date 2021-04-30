@@ -112,18 +112,13 @@ variable a : A
 example : R → (∃ x : A, R) :=
   assume : R, exists.intro a ‹ R ›
 
-example : (∃ x, P x ∧ R) ↔ (∃ x, P x) ∧ R :=
+example : (∃ x, p x ∧ r) ↔ (∃ x, p x) ∧ r := 
 begin split,
-  assume h, cases h with x _,
-  split,
-    existsi x, show P x, from ‹ P x ∧ R ›.left,
-    show R, from ‹ P x ∧ R ›.right,
-
-  assume h, cases h with ep r,
-  cases ep with x px, existsi x,
-  split,
-    show P x, from px,
-    show R, from r
+    assume h : ∃ x, p x ∧  r ,
+    exact match h with ⟨ w , ℘₁ , ℘₂ ⟩ := ⟨ ⟨ w , ℘₁⟩ , ℘₂ ⟩ end, 
+    
+    assume h : (∃ x, p x) ∧ r , 
+    exact match h with ⟨ ⟨ w , ℘₁ ⟩ , ℘₂ ⟩ := ⟨ w , ℘₁ , ℘₂ ⟩ end
 end
 
 example : (∃ x, P x ∨ Q x) ↔ (∃ x, P x) ∨ (∃ x, Q x) :=
