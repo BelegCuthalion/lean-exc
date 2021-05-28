@@ -150,8 +150,21 @@ begin split,
     existsi x, from ‹ ¬ P x ›,
   show false, from ‹ ¬∃ (x : A), ¬P x › this,
 end
-
-example : (∃ x, P x) ↔ ¬ (∀ x, ¬ P x) := sorry
+ 
+example : (∃ x, p x) ↔ ¬ (∀ x, ¬ p x) := 
+begin
+  split,
+  intros epx all_np,
+    cases epx with x px,
+      exact (all_np x) px ,
+  intro h₀,
+    by_contradiction ,
+      have all : ∀ x, ¬p x ,
+        assume x ,
+        assume hpx ,
+        exact h ( ⟨ x , hpx ⟩ ),
+      exact h₀ all ,
+end
 example : (¬ ∃ x, P x) ↔ (∀ x, ¬ P x) := sorry
 example : (¬ ∀ x, P x) ↔ (∃ x, ¬ P x) := sorry
 
