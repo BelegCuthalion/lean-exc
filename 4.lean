@@ -165,8 +165,34 @@ begin
         exact h ( ⟨ x , hpx ⟩ ),
       exact h₀ all ,
 end
-example : (¬ ∃ x, P x) ↔ (∀ x, ¬ P x) := sorry
-example : (¬ ∀ x, P x) ↔ (∃ x, ¬ P x) := sorry
+example : (¬ ∃ x, p x) ↔ (∀ x, ¬ p x) := 
+begin
+  split,
+    intros nh x px,
+    exact nh ⟨ x , px ⟩,
+
+    intros h epx,
+      cases epx,
+      exact h epx_w epx_h
+end
+
+
+example : (¬ ∀ x, p x) ↔ (∃ x, ¬ p x) := 
+begin
+  split,
+  --L_R
+  intro nallp ,
+  by_contradiction ℘,
+    have allp : ∀ x,p x,
+      assume x,
+      by_contradiction ψ ,
+        exact ℘ ⟨ x , ψ ⟩ ,
+      exact nallp allp,
+  --R_L
+  intros h₀ h₁,
+  cases h₀ ,
+  exact h₀_h ( h₁ h₀_w )
+end
 
 example : (∀ x, P x → R) ↔ (∃ x, P x) → R := sorry
 example : (∃ x, P x → R) ↔ (∀ x, P x) → R := sorry
