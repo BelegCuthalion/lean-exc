@@ -29,7 +29,7 @@ begin
     right, from h x
 end
 
--- 2
+-- 2 
 
 example : A → ((∀ x : A, R) ↔ R) :=
 begin
@@ -197,3 +197,27 @@ end
 example : (∀ x, P x → R) ↔ (∃ x, P x) → R := sorry
 example : (∃ x, P x → R) ↔ (∀ x, P x) → R := sorry
 example : (∃ x, R → P x) ↔ (R → ∃ x, P x) := sorry
+
+
+variables (α : Type*) (p q : α → Prop)
+variable r : Prop
+variables ℘ ψ : Prop 
+example : α → ((∀ x : α, r) ↔ r) := 
+begin
+  intro α ,
+  split ,
+  --LR
+  intro αr ,
+  exact αr α ,
+  --RL
+  intros r α ,
+  exact r ,
+end 
+example : (∀ x, r → p x) ↔ (r → ∀ x, p x) := 
+begin
+  split,
+  --LR
+  intros h₀ r x , exact h₀ x r ,
+  --RL
+  intros h₀ x r , exact h₀ r x ,
+end
